@@ -1,0 +1,7 @@
+{
+    "mongoURI": "mongodb://localhost:27017/users?authSource=admin",
+    "mongoUser": "",
+    "mongoPass": "",
+    "bot_token": "",
+    "notification_channel": ""
+}
