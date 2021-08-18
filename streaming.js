@@ -3,7 +3,7 @@ const User = require('./models/user');
 const Discord = require('discord.js');
 config_data = require('./config/config.json')
 
-module.exports = function(msg) {
+module.exports = function(bot) {
     setInterval(function() {
         User.find({},(err,users)=> {
             if(err) {

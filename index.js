@@ -12,7 +12,6 @@ const options = {
 	useUnifiedTopology: true
 };
 mongoose.connect(mongoURI, options);
-const User = require('./models/user');
 const Database = require('./database/user');
 
 const Discord = require("discord.js");
@@ -33,7 +32,7 @@ bot.on("ready", (err) => {
 	const streaming = require('./streaming')(bot);
 });
 
-bot.on("message", (msg, channel, err) => {
+bot.on("message", (msg, err) => {
 	if (err) {
 		return console.log(err)
 	}
