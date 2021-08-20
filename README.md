@@ -1,7 +1,7 @@
 # 8/20/21 Update
 This bot now supports multiple discords.  
 The official version of the bot is hosted on [Odysee Chatter](https://www.odysee-chatter.com) server.
-If you would like to use the official version, go [here](https://www.odysee-chatter.com).
+If you would like to use the official version, go [here](https://odysee-chatter.com/odysee_live_bot).
 
 # Odysee-Discord-Live-Notification-Bot
 
