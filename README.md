@@ -1,3 +1,8 @@
+# 8/20/21 Update
+This bot now supports multiple discords.  
+The official version of the bot is hosted on [Odysee Chatter](https://www.odysee-chatter.com) server.
+If you would like to use the official version, go [here](https://www.odysee-chatter.com).
+
 # Odysee-Discord-Live-Notification-Bot
 
 This bot requires
@@ -10,8 +15,3 @@ This is how the database would look with a user/claim id added to the users coll
 I have included a default config.json that you will need to rename to 'config.json'.
 
 In order to use the bot, type 'npm install' then 'nodemon' in the terminal or you can set it to run by itself 24/7 using [PM2](https://www.npmjs.com/package/pm2).
-
-## 8/20/21 Update
-This bot now supports multiple discords.  
-The official version of the bot is hosted on [Odysee Chatter](https://www.odysee-chatter.com) server.
-If you would like to use the official version, go [here](https://www.odysee-chatter.com).
