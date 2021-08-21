@@ -3,8 +3,10 @@ const User = require('./models/user');
 const Discord = require('discord.js');
 config_data = require('./config/config.json')
 const Database_Guild = require('./database/guild');
+const Lbry = require('lbry-sdk-nodejs/lib/sdk');
 
 module.exports = function(bot) {
+
     setInterval(function() {
         User.find({},(err,users)=> {
             if(err) {
@@ -33,26 +35,30 @@ module.exports = function(bot) {
                             }
                             else if(json.data.live === true) {
                                 if(user.live === false) {
-                                    user.live = true;
-                                    user.claimData.thumbnail = json.data.thumbnail;
-                                    user.claimData.name = json.data.claimData.name;
-                                    user.claimData.channelLink = json.data.claimData.channelLink;
-                                    user.save(function (err) {
-                                        if(err) {
-                                            console.log(err)
-                                        }
-                                    })
+                                    const claim_id = user.claimId;
 
-                                    const Embed = new Discord.MessageEmbed()
-                                        .setColor('#4f1c82')
-                                        .setTitle(`${json.data.claimData.name} just went live!`)
-                                        .setURL(json.data.claimData.channelLink)
-                                        .setAuthor(`Streamer: ${json.data.claimData.name}`, '', json.data.claimData.channelLink) // The '' is supposed to be stream thumbnail but CDN preview image comes back as 403 Forbidden.
-                                        .setImage('https://upload.wikimedia.org/wikipedia/en/thumb/7/7c/Odyssey_logo_1.svg/220px-Odyssey_logo_1.svg.png')
-                                        .setTimestamp()
-                                        .addField('\u200B','Hosted by: [Odysee Chatter](https://www.odysee-chatter.com)',true);
-                                
-                                    Database_Guild.SendGuildMessage(bot,Embed);
+                                    Lbry.Lbry.claim_search({claim_id: claim_id}).then(result => {
+                                        var thumbnail = result.items[0].value.thumbnail.url;
+                                        user.live = true;
+                                        user.claimData.thumbnail = thumbnail;
+                                        user.claimData.name = json.data.claimData.name;
+                                        user.claimData.channelLink = json.data.claimData.channelLink;
+                                        user.save(function (err) {
+                                            if(err) {
+                                                console.log(err)
+                                            }
+                                        })
+
+                                        const Embed = new Discord.MessageEmbed()
+                                            .setColor('#4f1c82')
+                                            .setTitle(`${user.claimData.name} just went live!`)
+                                            .setURL(user.claimData.channelLink)
+                                            .setAuthor(`Streamer: ${user.claimData.name}`, 'https://upload.wikimedia.org/wikipedia/en/thumb/7/7c/Odyssey_logo_1.svg/220px-Odyssey_logo_1.svg.png', user.claimData.channelLink)
+                                            .setImage(user.claimData.thumbnail)
+                                            .setTimestamp()
+                                            .addField('\u200B','Hosted by: [Odysee Chatter](https://www.odysee-chatter.com)',true);
+                                        Database_Guild.SendGuildMessage(bot,Embed);
+                                    })
                                 }
                             }
 			            })
