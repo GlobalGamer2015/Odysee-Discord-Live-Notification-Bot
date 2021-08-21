@@ -26,7 +26,7 @@ const bot = new Client({
         status: 'online',
         afk: false,
         activities: [{
-            name: ' in [Redacted] servers!'
+            name: ' in [Redacted] servers! Type "!odysee help" for commands!'
         }],
     },
 });
