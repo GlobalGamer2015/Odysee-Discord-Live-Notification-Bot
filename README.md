@@ -8,6 +8,7 @@ If you would like to use the official version, go [here](https://odysee-chatter.
 This bot requires
 - [MongoDB](https://docs.mongodb.com/manual/administration/install-community/), I recommend using your server provider on setting MongoDB up, here is DigitalOcean's [Guide](https://www.digitalocean.com/community/tutorials/how-to-install-mongodb-on-ubuntu-18-04-source)  
 - [NodeJS v16.7.0](https://nodejs.org/en/download/current/)
+- [LBRY SDK](https://github.com/lbryio/lbry-sdk)
 
 This is how the database would look with a user/claim id added to the users collection.  
 ![users collection](mongodb.jpg)
