@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "discord.js": "^13.1.0",
+    "lbry-sdk-nodejs": "^0.101.0",
     "mongodb": "^4.1.0",
     "mongoose": "^5.13.7",
     "node-fetch": "^2.6.1"
