@@ -46,27 +46,29 @@ module.exports = function(bot) {
                                             }
                                         }).then(ChainQuery_res => ChainQuery_res.json())
                                         .then(stream => {
-                                            const thumbnail = stream.data[0].thumbnail_url;
-                                            user.live = true;
-                                            user.claimData.thumbnail = thumbnail;
-                                            user.claimData.name = json.data.claimData.name;
-                                            user.claimData.channelLink = json.data.claimData.channelLink;
-                                            user.save(function (err) {
-                                                if(err) {
-                                                    console.log(err)
-                                                }
-                                            })
-                                        })
+                                            if(stream.data[0].thumbnail_url) {
+                                                const thumbnail = stream.data[0].thumbnail_url;
+                                                user.live = true;
+                                                user.claimData.thumbnail = thumbnail;
+                                                user.claimData.name = json.data.claimData.name;
+                                                user.claimData.channelLink = json.data.claimData.channelLink;
+                                                user.save(function (err) {
+                                                    if(err) {
+                                                        console.log(err)
+                                                    }
+                                                })
 
-                                        const Embed = new Discord.MessageEmbed()
-                                            .setColor('#4f1c82')
-                                            .setTitle(`${user.claimData.name} just went live!`)
-                                            .setURL(user.claimData.channelLink)
-                                            .setAuthor(`Streamer: ${user.claimData.name}`, 'https://upload.wikimedia.org/wikipedia/en/thumb/7/7c/Odyssey_logo_1.svg/220px-Odyssey_logo_1.svg.png', user.claimData.channelLink)
-                                            .setImage(user.claimData.thumbnail)
-                                            .setTimestamp()
-                                            .addField('\u200B','Hosted by: [Odysee Chatter](https://www.odysee-chatter.com)',true);
-                                        Database_Guild.SendGuildMessage(bot,Embed);
+                                                const Embed = new Discord.MessageEmbed()
+                                                    .setColor('#4f1c82')
+                                                    .setTitle(`${user.claimData.name} just went live!`)
+                                                    .setURL(user.claimData.channelLink)
+                                                    .setAuthor(`Streamer: ${user.claimData.name}`, 'https://upload.wikimedia.org/wikipedia/en/thumb/7/7c/Odyssey_logo_1.svg/220px-Odyssey_logo_1.svg.png', user.claimData.channelLink)
+                                                    .setImage(user.claimData.thumbnail)
+                                                    .setTimestamp()
+                                                    .addField('\u200B','Hosted by: [Odysee Chatter](https://www.odysee-chatter.com)',true);
+                                                Database_Guild.SendGuildMessage(bot,Embed);
+                                            }
+                                        })
                                     })
                                 }
                             }
