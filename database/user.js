@@ -33,6 +33,7 @@ function AddUser(msg) {
                             if(err) throw err;
                             msg.channel.send(`${claimId} has been added.`)
                         })
+                        db.close();
                     }
                     else if(user.disabled === false) {
                         msg.channel.send(`${claimId} exists.`)

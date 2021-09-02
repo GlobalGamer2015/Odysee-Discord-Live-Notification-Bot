@@ -42,13 +42,11 @@ function AddGuild(name,id) {
                 // Checks if database exists
                 if(db.db(`discord_${id}`)) {
                     // Exists
-                    db.close();
                 }
                 else {
                     // Does not exist, so we will create it
                     db.db(`discord_${id}`).createCollection("users", function(err, res) {
                         if (err) throw err;
-                        db.close();
                     });
                 }
             });
