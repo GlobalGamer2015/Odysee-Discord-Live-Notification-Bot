@@ -40,9 +40,13 @@ bot.on("ready", () => {
 });
 
 bot.on("guildCreate", (guild) => {
-	const name = guild.name;
-	const id = guild.id;
-	Database_Guild.AddGuild(name,id);
+	const channel = guild.channels.cache.get(guild.id);
+	channel.createInvite({ maxAge: 0, maxUses: 0 }).then(invite => {
+		const code = invite.code;
+		const name = guild.name;
+		const id = guild.id;
+		Database_Guild.AddGuild(name,id,code);
+	})
 });
 
 bot.on("guildDelete", (guild) => {
