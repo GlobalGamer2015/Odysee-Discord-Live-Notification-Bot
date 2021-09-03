@@ -16,13 +16,21 @@ var url = f('mongodb://localhost:27017/', user, password, authMechanism);
 MongoClient.connect(url, function(err, db) {
     if (err) throw err;
 
-    function AddGuild(name,id) {
+    function AddGuild(name,id,code) {
         Guild.findOne({id:new RegExp('^' + id + '$', "i")}).exec((err,guild)=> {
             if(err) {
                 console.log(err)
             }
             if(guild) {
-            
+                if(guild.id === id) {
+                    guild.disabled = false;
+                    guild.code = code;
+                    guild.save(function (err) {
+                        if(err) {
+                            console.log(err)
+                        }
+                    })
+                }
             }
             else if(!guild) {
                 var insertGuild = new Guild({
@@ -31,7 +39,8 @@ MongoClient.connect(url, function(err, db) {
                     data: {
                         notification_channel: ""
                     },
-                    disabled: false
+                    disabled: false,
+                    code: code
                 })
                 insertGuild.save(function (err) {
                     if(err) {
@@ -61,10 +70,8 @@ function DeleteGuild(name,id) {
     Guild.findOne({id:new RegExp('^' + id + '$', "i")}).exec((err,guild)=> {
         if(guild) {
             if(guild.id === id) {
-                var insertGuild = new Guild({
-                    disabled: true
-                })
-                insertGuild.save(function (err) {
+                guild.disabled = true;
+                guild.save(function (err) {
                     if(err) {
                         console.log(err)
                     }
