@@ -7,6 +7,7 @@ var guild = new mongoose.Schema({
         notification_channel:{unique:false,type:String,required:false},
     },
     disabled:{unique:false,type:Boolean,required:false},
+    code:{unique:false,type:String,required:false}
 })
 
 module.exports = mongoose.model('Guild',guild)
