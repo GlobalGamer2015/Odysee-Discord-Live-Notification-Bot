@@ -1,20 +1,21 @@
 config_data = require('./../config/config.json')
 
-function AddUser(msg) {
-    const claim_ids = msg.content.replace('odysee add ', '').split(" ");
-    const guild_id = msg.channel.guild.id;
+const MongoClient = require('mongodb').MongoClient,
+f = require('util').format,
+assert = require('assert');
 
-    claim_ids.forEach(function(claimId) {
-        const MongoClient = require('mongodb').MongoClient,
-        f = require('util').format,
-        assert = require('assert');
-
-        var url = f(`mongodb://${config_data.mongoUser}:${config_data.mongoPass}@localhost:27017?authSource=admin`)
+var url = f(`mongodb://${config_data.mongoUser}:${config_data.mongoPass}@localhost:27017?authSource=admin`)
         
-        // Used for local testing
-        //var url = f('mongodb://localhost:27017/');
+// Used for local testing
+//var url = f('mongodb://localhost:27017/');
 
-        MongoClient.connect(url, function(err, db) {
+MongoClient.connect(url, function(err, db) {
+
+    function AddUser(msg) {
+        const claim_ids = msg.content.replace('odysee add ', '').split(" ");
+        const guild_id = msg.channel.guild.id;
+
+        claim_ids.forEach(function(claimId) {
             if (err) throw err;
 
             var dbo = db.db(`discord_${guild_id}`);
@@ -57,25 +58,14 @@ function AddUser(msg) {
                     })
                 }
             })
-        });
-    })
-}
+        })
+    }
 
-function DeleteUser(msg) {
-    const claim_ids = msg.content.replace('odysee remove ', '').split(" ");
-    const guild_id = msg.channel.guild.id;
+    function DeleteUser(msg) {
+        const claim_ids = msg.content.replace('odysee remove ', '').split(" ");
+        const guild_id = msg.channel.guild.id;
 
-    claim_ids.forEach(function(claimId) {
-        
-        const MongoClient = require('mongodb').MongoClient,
-        f = require('util').format,
-        assert = require('assert');
-
-        var url = f(`mongodb://${config_data.mongoUser}:${config_data.mongoPass}@localhost:27017?authSource=admin`)
-        
-        //var url = f('mongodb://localhost:27017/');
-
-        MongoClient.connect(url, function(err, db) {
+        claim_ids.forEach(function(claimId) {
             if (err) throw err;
 
             var dbo = db.db(`discord_${guild_id}`);
@@ -103,9 +93,9 @@ function DeleteUser(msg) {
                     msg.channel.send(`${claimId} does not exist.`)
                 }
             })
-        });
-    })
-}
+        })
+    }
 
-module.exports.AddUser = AddUser;
-module.exports.DeleteUser = DeleteUser;
+    module.exports.AddUser = AddUser;
+    module.exports.DeleteUser = DeleteUser;
+})

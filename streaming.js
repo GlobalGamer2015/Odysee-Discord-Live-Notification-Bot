@@ -6,19 +6,19 @@ const Lbry = require('lbry-sdk-nodejs/lib/sdk');
 
 module.exports = function(bot) {
 
-    setInterval(function() {
-        const MongoClient = require('mongodb').MongoClient,
-        f = require('util').format,
-        assert = require('assert');
+    const MongoClient = require('mongodb').MongoClient,
+    f = require('util').format,
+    assert = require('assert');
 
-        var url = f(`mongodb://${config_data.mongoUser}:${config_data.mongoPass}@localhost:27017/admin?authSource=admin`)
+    var url = f(`mongodb://${config_data.mongoUser}:${config_data.mongoPass}@localhost:27017/admin?authSource=admin`)
         
-        // Used for local testing
-        //var url = f('mongodb://localhost:27017/');
+    // Used for local testing
+    //var url = f('mongodb://localhost:27017/');
 
-        MongoClient.connect(url, function(err, db) {
-            if (err) throw err;
+    MongoClient.connect(url, function(err, db) {
+        if (err) throw err;
 
+        setInterval(function() {
             db.db().admin().listDatabases().then(dbs => {
                 const databases = dbs.databases;
                 databases.forEach(function(database) {
@@ -123,6 +123,6 @@ module.exports = function(bot) {
                     }
                 })
             })
-        });
-    },60000)
+        },60000)
+    });
 }
