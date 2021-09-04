@@ -34,7 +34,6 @@ MongoClient.connect(url, function(err, db) {
                             if(err) throw err;
                             msg.channel.send(`${claimId} has been added.`)
                         })
-                        db.close();
                     }
                     else if(user.disabled === false) {
                         msg.channel.send(`${claimId} exists.`)
@@ -96,6 +95,54 @@ MongoClient.connect(url, function(err, db) {
         })
     }
 
+    function DeleteAllUsers(msg) {
+        const guild_id = msg.channel.guild.id;
+
+            var dbo = db.db(`discord_${guild_id}`);
+            dbo.collection("users").find({}).toArray(function(err, users) {
+                if(err) {
+                    console.log(err)
+                }
+
+                if(users.length >= 1) {
+                    // Users
+                    msg.channel.send(`Your claim id database will be wiped clean, it may take a few minutes if you have a lot of claim ids.`)
+                    users.forEach(user => {
+                        const claimId = user.claimId;
+                        dbo.collection("users").deleteOne({claimId: claimId}, function(err, res) {
+                            if(err) throw err;
+                        })
+                    })
+                    msg.channel.send(`Your claim id database is wiped.`)
+                }
+                else if(users.length === 0) {
+                    // No users
+                    msg.channel.send("Your claim id database is empty.")
+                }
+            })
+    }
+
+    function GetAllUsers(msg) {
+        const guild_id = msg.channel.guild.id;
+
+            var dbo = db.db(`discord_${guild_id}`);
+            dbo.collection("users").find({}).toArray(function(err, users) {
+                if(err) {
+                    console.log(err)
+                }
+
+                if(users.length >= 1) {
+                    msg.channel.send(`Your claim id database has ${users.length} ids.`)
+                }
+                else if(users.length === 0) {
+                    // No users
+                    msg.channel.send("Your claim id database is empty.")
+                }
+            })
+    }
+
     module.exports.AddUser = AddUser;
     module.exports.DeleteUser = DeleteUser;
+    module.exports.DeleteAllUsers = DeleteAllUsers;
+    module.exports.GetAllUsers = GetAllUsers;
 })
