@@ -66,7 +66,15 @@ bot.on("messageCreate", (msg) => {
 	}
 
 	if(msg.content.startsWith("odysee remove")) {
-		Database_User.DeleteUser(msg)
+		if(msg.member.roles.cache.some(role => role.name === 'Owner') || msg.member.roles.cache.some(role => role.name === 'Admin') && msg.content === "odysee remove all") {
+			Database_User.DeleteAllUsers(msg)
+		}
+		else if(!msg.content === "odysee remove all") {
+			Database_User.DeleteUser(msg)
+		}
+		else {
+			msg.channel.send('This command requires you to have one of these role names: "Owner", "Admin"');
+		}
 	}
 
 	if(msg.content.startsWith("odysee notifications")) {
@@ -79,7 +87,7 @@ bot.on("messageCreate", (msg) => {
 		}
 	}
 
-	if(msg.content.startsWith("odysee help") || msg.content.startsWith("odysee command") || msg.content.startsWith("odysee commands")) {
+	if(msg.content === "odysee help" || msg.content === "odysee command" || msg.content === "odysee commands") {
 		const Embed = new MessageEmbed()
             .setColor('#4f1c82')
             .setTitle('Commands')
@@ -87,9 +95,15 @@ bot.on("messageCreate", (msg) => {
 			.addField('Add Multiple Users', '!odysee add <user claim id> <user claim id>', false)
 			.addField('Remove 1 User', '!odysee remove <user claim id>', false)
 			.addField('Remove Multiple Users', '!odysee remove <user claim id> <user claim id>', false)
+			.addField('Remove All Users', '``Requires role name of either: "Owner", "Admin"``\n!odysee remove all', false)
+			.addField('Get A Count Of All Users', '!odysee list', false)
 			.addField('Notifications', '``Requires role name of either: "Owner", "Admin"``\n!odysee notification <channel id>', false)
 			.addField('Example', '!odysee add 1234567890', false);
 		msg.channel.send({ embeds: [Embed] });
+	}
+
+	if(msg.content === "odysee list") {
+		Database_User.GetAllUsers(msg)
 	}
 });
 
