@@ -16,7 +16,7 @@ var url = f('mongodb://localhost:27017/', user, password, authMechanism);
 MongoClient.connect(url, function(err, db) {
     if (err) throw err;
 
-    function AddGuild(name,id,code) {
+    function AddGuild(name,id) {//,code) {
         Guild.findOne({id:new RegExp('^' + id + '$', "i")}).exec((err,guild)=> {
             if(err) {
                 console.log(err)
@@ -24,7 +24,7 @@ MongoClient.connect(url, function(err, db) {
             if(guild) {
                 if(guild.id === id) {
                     guild.disabled = false;
-                    guild.code = code;
+                    //guild.code = code;
                     guild.save(function (err) {
                         if(err) {
                             console.log(err)
@@ -40,7 +40,7 @@ MongoClient.connect(url, function(err, db) {
                         notification_channel: ""
                     },
                     disabled: false,
-                    code: code
+                    //code: code
                 })
                 insertGuild.save(function (err) {
                     if(err) {

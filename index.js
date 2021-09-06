@@ -40,13 +40,13 @@ bot.on("ready", () => {
 });
 
 bot.on("guildCreate", (guild) => {
-	const channel = guild.channels.cache.get(guild.id);
-	channel.createInvite({ maxAge: 0, maxUses: 0 }).then(invite => {
-		const code = invite.code;
+	//const channel = guild.channels.cache.get(guild.id);
+	//channel.createInvite({ maxAge: 0, maxUses: 0 }).then(invite => {
+		//const code = invite.code;
 		const name = guild.name;
 		const id = guild.id;
-		Database_Guild.AddGuild(name,id,code);
-	})
+		Database_Guild.AddGuild(name,id);//,code);
+	//})
 });
 
 bot.on("guildDelete", (guild) => {
@@ -62,19 +62,25 @@ bot.on("messageCreate", (msg) => {
 	if(msg.author.bot) return;
 
 	if(msg.content.startsWith("odysee add")) {
-		Database_User.AddUser(msg)
+		if(msg.content === "odysee add add") {
+			msg.channel.send('I am unable to do that command with "add".')
+		}
+		else {
+			Database_User.AddUser(msg)
+		}
 	}
 
-	if(msg.content.startsWith("odysee remove")) {
+	if(msg.content === "odysee remove all") {
 		if(msg.member.roles.cache.some(role => role.name === 'Owner') || msg.member.roles.cache.some(role => role.name === 'Admin') && msg.content === "odysee remove all") {
 			Database_User.DeleteAllUsers(msg)
-		}
-		else if(!msg.content === "odysee remove all") {
-			Database_User.DeleteUser(msg)
 		}
 		else {
 			msg.channel.send('This command requires you to have one of these role names: "Owner", "Admin"');
 		}
+	}
+
+	if(msg.content.startsWith("odysee remove") && msg.content !== "odysee remove all") {
+		Database_User.DeleteUser(msg)
 	}
 
 	if(msg.content.startsWith("odysee notifications")) {

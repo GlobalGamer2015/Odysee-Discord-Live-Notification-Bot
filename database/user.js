@@ -79,7 +79,7 @@ MongoClient.connect(url, function(err, db) {
                                 disabled: true
                             }
                         }
-                        dbo.collection("users").updateOne({claimId: claim_id}, updateUser, function(err, res) {
+                        dbo.collection("users").updateOne({claimId: claimId}, updateUser, function(err, res) {
                             if(err) throw err;
                             msg.channel.send(`${claimId} has been removed.`)
                         })
