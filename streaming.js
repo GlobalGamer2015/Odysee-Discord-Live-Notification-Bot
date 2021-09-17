@@ -2,7 +2,6 @@ const fetch = require('node-fetch');
 const Guild = require('./models/guild');
 const Discord = require('discord.js');
 config_data = require('./config/config.json')
-const Lbry = require('lbry-sdk-nodejs/lib/sdk');
 
 module.exports = function(bot) {
 
@@ -57,38 +56,39 @@ module.exports = function(bot) {
                                                     }
                                                     else if(channel.data.live === true) {
                                                         if(user.live === false) {
-                                                            Lbry.Lbry.claim_search({claim_id: claim_id}).then(result => {
-                                                                fetch("https://chainquery.lbry.com/api/sql?query=SELECT%20*%20FROM%20claim%20WHERE%20publisher_id=%22" + claim_id + "%22%20AND%20bid_state%3C%3E%22Spent%22%20AND%20claim_type=1%20AND%20source_hash%20IS%20NULL%20ORDER%20BY%20id%20DESC%20LIMIT%201", {
-                                                                    method: 'get',
-                                                                    headers: {
-                                                                        'Content-Type': 'application/json',
-                                                                    }
-                                                                }).then(ChainQuery_res => ChainQuery_res.json())
-                                                                .then(stream => {
-                                                                    if(stream.data[0].thumbnail_url) {
-                                                                        const channel_name = channel.data.claimData.name;
-                                                                        const channelLink = channel.data.claimData.channelLink;
-                                                                        const stream_name = stream.data[0].name;
-                                                                        const thumbnail = stream.data[0].thumbnail_url;
+                                                            fetch("https://chainquery.lbry.com/api/sql?query=SELECT%20*%20FROM%20claim%20WHERE%20publisher_id=%22" + claim_id + "%22%20AND%20bid_state%3C%3E%22Spent%22%20AND%20claim_type=1%20AND%20source_hash%20IS%20NULL%20ORDER%20BY%20id%20DESC%20LIMIT%201", {
+                                                                method: 'get',
+                                                                headers: {
+                                                                    'Content-Type': 'application/json',
+                                                                }
+                                                            }).then(ChainQuery_res => ChainQuery_res.json())
+                                                            .then(stream => {
+                                                                if(stream.data[0].thumbnail_url) {
+                                                                    const channel_name = channel.data.claimData.name;
+                                                                    const channelLink = channel.data.claimData.channelLink;
+                                                                    const stream_name = stream.data[0].name;
+                                                                    const thumbnail = stream.data[0].thumbnail_url;
 
-                                                                        const stream_url = channelLink+'/'+stream_name;
+                                                                    const stream_url = channelLink+'/'+stream_name;
 
-                                                                        var updateUser = {
-                                                                            $set: {
-                                                                                live: true,
-                                                                                claimData: {
-                                                                                    name: channel_name,
-                                                                                    streamLink: stream_url,
-                                                                                    thumbnail: thumbnail,
-                                                                                }
+                                                                    var updateUser = {
+                                                                        $set: {
+                                                                            live: true,
+                                                                            claimData: {
+                                                                                name: channel_name,
+                                                                                streamLink: stream_url,
+                                                                                thumbnail: thumbnail,
                                                                             }
                                                                         }
-                                                                        dbo.collection("users").updateOne({claimId: claim_id}, updateUser, function(err, res) {
-                                                                            if(err) throw err;
-                                                                        })
+                                                                    }
+                                                                    dbo.collection("users").updateOne({claimId: claim_id}, updateUser, function(err, res) {
+                                                                        if(err) throw err;
+                                                                    })
 
-                                                                        dbo.collection("users").findOne({claimId: claim_id}, function(err, user) {
-                                                                            if(err) throw err;
+                                                                    dbo.collection("users").findOne({claimId: claim_id}, function(err, user) {
+                                                                        if(err) throw err;
+                                                                            
+                                                                        if(user) {
                                                                             const Embed = new Discord.MessageEmbed()
                                                                                 .setColor('#4f1c82')
                                                                                 .setTitle(`${user.claimData.name} just went live!`)
@@ -105,9 +105,9 @@ module.exports = function(bot) {
                                                                                     bot.channels.cache.get(guild.data.notification_channel).send({ embeds: [Embed] });
                                                                                 }
                                                                             }
-                                                                        })
-                                                                    }
-                                                                })
+                                                                        }
+                                                                    })
+                                                                }
                                                             })
                                                         }
                                                     }
