@@ -103,7 +103,7 @@ bot.on("messageCreate", (msg) => {
 			.addField('Remove Multiple Users', '!odysee remove <user claim id> <user claim id>', false)
 			.addField('Remove All Users', '``Requires role name of either: "Owner", "Admin"``\n!odysee remove all', false)
 			.addField('Get A Count Of All Users', '!odysee list', false)
-			.addField('Notifications', '``Requires role name of either: "Owner", "Admin"``\n!odysee notification <channel id>', false)
+			.addField('Notifications', '``Requires role name of either: "Owner", "Admin"``\n!odysee notifications <channel id>', false)
 			.addField('Example', '!odysee add 1234567890', false);
 		msg.channel.send({ embeds: [Embed] });
 	}
